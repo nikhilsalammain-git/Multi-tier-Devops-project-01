@@ -14,6 +14,9 @@ terraform.rc
 *.pem
 *.key
 
+# Kubernetes rendered secrets
+flask-CRUD-infra/k8s/secret.yaml
+
 # Python
 __pycache__/
 *.py[cod]
