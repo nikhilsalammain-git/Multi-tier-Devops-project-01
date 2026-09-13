@@ -1,0 +1,33 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+.terraformrc
+terraform.rc
+
+# Environment and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Local tooling
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
