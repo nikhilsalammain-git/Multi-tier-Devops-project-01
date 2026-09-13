@@ -97,6 +97,7 @@ variable "rds_password" {
   description = "RDS master password. Supply through TF_VAR_rds_password."
   type        = string
   sensitive   = true
+  default     = "admin123"
 }
 
 variable "rds_publicly_accessible" {
