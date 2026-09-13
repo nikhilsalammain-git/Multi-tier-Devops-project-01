@@ -63,8 +63,8 @@ jobs:
 
       - name: Build, tag & push image to Docker Hub
         run: |
-          docker build -t ${{ secrets.DOCKER_USER }}/flask-img:${{ github.sha }} flask-app/
-          docker push ${{ secrets.DOCKER_USER }}/flask-img:${{ github.sha }}
+          docker build -t ${{ secrets.DOCKER_USER }}/flask-app:latest flask-app/
+          docker push ${{ secrets.DOCKER_USER }}/flask-app:latest
 
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
@@ -90,6 +90,6 @@ jobs:
         run: |
           kubectl apply -k flask-CRUD-infra/k8s
           kubectl set image deployment/flask-app \
-            flask-app=${{ secrets.DOCKER_USER }}/flask-img:${{ github.sha }} \
+            flask-app=${{ secrets.DOCKER_USER }}/flask-app:latest \
             -n flask-app
           kubectl rollout status deployment/flask-app -n flask-app
