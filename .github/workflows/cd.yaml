@@ -13,7 +13,7 @@ env:
   TF_INPUT: false
   TERRAFORM_DIR: flask-CRUD-infra/terraform
   EKS_CLUSTER_NAME: ${{ vars.EKS_CLUSTER_NAME }}
-  TF_VAR_rds_password: ${{ secrets.RDS_PASSWORD }}
+  
 
 jobs:
   terraform-apply:
@@ -82,15 +82,12 @@ jobs:
       - name: Update Kubernetes database secret
         run: |
           kubectl create secret generic flask-db-secret \
-            --from-literal=DB_URL="postgresql://flask-admin:${{ secrets.RDS_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" \
+            --from-literal=DB_URL="postgresql://flask-admin:admin123@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" \
             --namespace=flask-app \
             --dry-run=client -o yaml | kubectl apply -f -
-          echo "DB_URL=postgresql://flask-admin:${{ secrets.RDS_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" 
+          echo "DB_URL=postgresql://flask-admin:admin123@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" 
 
-      # - name: Set image and deploy
-      #   run: |
-      #     kubectl apply -k flask-CRUD-infra/k8s
-      #     kubectl set image deployment/flask-app \
-      #       flask-app=${{ secrets.DOCKER_USER }}/flask-app:latest \
-      #       -n flask-app
-      #     kubectl rollout status deployment/flask-app -n flask-app
+      - name: Set image and deploy
+        run: |
+          kubectl apply -k flask-CRUD-infra/k8s
+          kubectl rollout status deployment/flask-app -n flask-app

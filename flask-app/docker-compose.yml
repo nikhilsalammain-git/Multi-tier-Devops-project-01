@@ -7,18 +7,8 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - DB_URL=postgresql://postgres:postgres@flask_db:5432/postgres
+      - DB_URL=postgresql://flaskadmin:8Byte$123@eight-byte-postgres.ceb8ecwkmdxo.us-east-1.rds.amazonaws.com:5432/flaskdb
         
-    depends_on:
-      flask_db:
-        condition: service_healthy
+   
 
-  flask_db:
-    image: postgres:12
-    environment:
-      - POSTGRES_PASSWORD=postgres
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 2s
-      timeout: 5s
-      retries: 10
+  
