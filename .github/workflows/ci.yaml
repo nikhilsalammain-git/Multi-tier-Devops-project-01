@@ -21,6 +21,6 @@ jobs:
 
         - name: Build, tag & push image to docker hub
           run: |
-            docker build -t ${{ secrets.DOCKER_USER }}/flask-img:latest flask-CRUD-docker/
+            docker build -t ${{ secrets.DOCKER_USER }}/flask-img:latest flask-app/
             docker push ${{ secrets.DOCKER_USER }}/flask-img:latest
           

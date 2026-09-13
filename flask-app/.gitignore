@@ -1,0 +1,33 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.db
+*.log
+
+# Local environments and secrets
+.env
+.env.*
+!.env.example
+
+# Test and coverage output
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Build and packaging output
+build/
+dist/
+*.egg-info/
+
+# Local Docker overrides
+docker-compose.override.yml
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
