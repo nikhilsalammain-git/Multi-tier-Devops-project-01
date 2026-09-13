@@ -81,3 +81,8 @@ output "rds_connection_string" {
   value       = module.rds.connection_string
   sensitive   = true
 }
+
+output "rds_db_name" {
+  description = "RDS database name."
+  value       = module.rds.db_name
+}
