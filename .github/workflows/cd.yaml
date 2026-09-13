@@ -13,6 +13,7 @@ env:
   TF_INPUT: false
   TERRAFORM_DIR: flask-CRUD-infra/terraform
   EKS_CLUSTER_NAME: ${{ vars.EKS_CLUSTER_NAME }}
+  TF_VAR_rds_password: ${{ secrets.RDS_PASSWORD }}
 
 jobs:
   terraform-apply:
@@ -26,7 +27,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.9.8
+          terraform_version: "1.10.0"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -38,9 +39,6 @@ jobs:
       - name: Terraform init
         working-directory: ${{ env.TERRAFORM_DIR }}
         run: terraform init -input=false
-      
-      - name: RDS password
-        run: export TF_VAR_rds_password=${{ secrets.RDS_PASSWORD }}
 
       - name: Terraform validate
         working-directory: ${{ env.TERRAFORM_DIR }}
@@ -50,27 +48,23 @@ jobs:
         working-directory: ${{ env.TERRAFORM_DIR }}
         run: terraform apply -input=false -auto-approve
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        
-      - name: Login to docker
-        uses: docker/login-action@v3
-        with: 
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_TOKEN }}        
-
-      - name: Build, tag & push image to docker hub
-        run: |
-          docker build -t ${{ secrets.DOCKER_USER }}/flask-img:latest flask-app/
-          docker push ${{ secrets.DOCKER_USER }}/flask-img:latest
-      - name: Get RDS endpoint from Terraform
+      - name: Get RDS connection info from Terraform
         id: rds
+        working-directory: ${{ env.TERRAFORM_DIR }}
         run: |
-          cd ${{ env.TERRAFORM_DIR }}
-          terraform init -input=false
-          ENDPOINT=$(terraform output -raw endpoint)
-          echo "endpoint=$ENDPOINT" >> "$GITHUB_OUTPUT"
+          echo "endpoint=$(terraform output -raw endpoint)" >> "$GITHUB_OUTPUT"
           echo "db_name=$(terraform output -raw db_name)" >> "$GITHUB_OUTPUT"
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build, tag & push image to Docker Hub
+        run: |
+          docker build -t ${{ secrets.DOCKER_USER }}/flask-img:${{ github.sha }} flask-app/
+          docker push ${{ secrets.DOCKER_USER }}/flask-img:${{ github.sha }}
 
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
@@ -92,8 +86,10 @@ jobs:
             --namespace=flask-app \
             --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Deploy Kubernetes resources
-        run: kubectl apply -k flask-CRUD-infra/k8s
-          
-
-
+      - name: Set image and deploy
+        run: |
+          kubectl apply -k flask-CRUD-infra/k8s
+          kubectl set image deployment/flask-app \
+            flask-app=${{ secrets.DOCKER_USER }}/flask-img:${{ github.sha }} \
+            -n flask-app
+          kubectl rollout status deployment/flask-app -n flask-app
