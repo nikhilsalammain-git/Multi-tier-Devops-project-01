@@ -48,14 +48,12 @@ jobs:
         working-directory: ${{ env.TERRAFORM_DIR }}
         run: terraform apply -input=false -auto-approve
 
-      - name: Get RDS connection string from Terraform
+      - name: Get RDS connection info from Terraform
         id: rds
         working-directory: ${{ env.TERRAFORM_DIR }}
         run: |
-          set -euo pipefail
-          DB_URL=$(terraform output -raw connection_string)
-          echo "::add-mask::$DB_URL"
-          echo "db_url=$DB_URL" >> "$GITHUB_OUTPUT"
+          echo "endpoint=$(terraform output -raw endpoint)" >> "$GITHUB_OUTPUT"
+          echo "db_name=$(terraform output -raw db_name)" >> "$GITHUB_OUTPUT"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -84,7 +82,7 @@ jobs:
       - name: Update Kubernetes database secret
         run: |
           kubectl create secret generic flask-db-secret \
-            --from-literal=DB_URL="${{ steps.rds.outputs.db_url }}" \
+            --from-literal=DB_URL="postgresql://${{ vars.RDS_USERNAME }}:${{ secrets.RDS_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" \
             --namespace=flask-app \
             --dry-run=client -o yaml | kubectl apply -f -
 
