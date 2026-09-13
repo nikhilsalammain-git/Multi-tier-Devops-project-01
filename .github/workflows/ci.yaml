@@ -1,4 +1,4 @@
-Name: Continuous Integration
+name: Continuous Integration
 
 on:
     push:
@@ -11,7 +11,7 @@ jobs:
 
         steps:
         - name: Checkout
-          uses: actions/checkout@
+          uses: actions/checkout@v4
         
         - name: Login to docker
           uses: docker/login-action@v3
