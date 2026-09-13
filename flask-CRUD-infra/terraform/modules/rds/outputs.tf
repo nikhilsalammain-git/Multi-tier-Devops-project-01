@@ -13,3 +13,8 @@ output "connection_string" {
   value       = "postgresql://${var.username}:${var.password}@${aws_db_instance.rds.address}:${aws_db_instance.rds.port}/${var.db_name}"
   sensitive   = true
 }
+
+output "db_name" {
+  description = "RDS database name."
+  value       = var.db_name
+}
