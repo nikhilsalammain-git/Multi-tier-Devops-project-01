@@ -85,7 +85,7 @@ jobs:
             --from-literal=DB_URL="postgresql://flask-admin:${{ secrets.RDS_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" \
             --namespace=flask-app \
             --dry-run=client -o yaml | kubectl apply -f -
-          echo "DB_URL=postgresql://flask-admin:${{ secrets.RDS_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" >> "$GITHUB_ENV"
+          echo "DB_URL=postgresql://flask-admin:${{ secrets.RDS_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" 
 
       # - name: Set image and deploy
       #   run: |
