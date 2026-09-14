@@ -90,9 +90,7 @@ jobs:
 
       - name: Set image and deploy flask app
         run: |
-          helm upgrade --install flask-app ./flask-CRUD-infra/helm/flask-app \
-            --namespace flask-app \
-            --set env.DB_URL=postgresql://flaskadmin:{{ secrets.DB_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}
+          helm upgrade --install flask-app ./flask-CRUD-infra/helm/flask-app --namespace flask-app --set env.DB_URL=postgresql://flaskadmin:{{ secrets.DB_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}
       - name: Verify Deployment
         run: |
           kubectl rollout status deployment/flask-app -n flask-app
@@ -101,9 +99,7 @@ jobs:
         run: |
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
-          helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack \
-            --namespace monitoring \
-            --create-namespace
+          helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
           helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack   -n monitoring   -f monitoring-values.yaml
 
           kubectl apply -f flask-CRUD-infra/helm/service-monitor.yaml -n monitoring
