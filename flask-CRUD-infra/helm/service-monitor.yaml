@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: flask-app
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack   # must match the Helm release name for auto-discovery
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: flask-app   # must match your Service's labels
+  namespaceSelector:
+    matchNames:
+      - default   # namespace where your flask-app Service actually lives
+  endpoints:
+    - port: metrics         # must match the named port in your Service
+      path: /metrics
+      interval: 15s
