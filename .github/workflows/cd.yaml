@@ -86,13 +86,13 @@ jobs:
             --from-literal=DB_URL="postgresql://flaskadmin:{{ secrets.DB_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" \
             --namespace=flask-app \
             --dry-run=client -o yaml | kubectl apply -f -
-          echo "DB_URL=postgresql://flaskadmin:{{ secrets.DB_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" 
+          echo "DB_URL=postgresql://flaskadmin:${{ secrets.DB_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" 
       
       - name: Setup Helm
         uses: azure/setup-helm@v4
         with:
           version: latest
-          
+
       - name: Set image and deploy flask app
         run: |
           helm upgrade --install flask-app ./flask-CRUD-infra/helm/flask-app --namespace flask-app --set env.DB_URL=postgresql://flaskadmin:{{ secrets.DB_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}
