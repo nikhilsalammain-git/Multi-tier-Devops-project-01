@@ -105,7 +105,7 @@ jobs:
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
           helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
-          helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack   -n monitoring   -f monitoring-values.yaml
+          helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack   -n monitoring   -f flask-CRUD-infra/helm/monitoring-values.yaml
 
           kubectl apply -f flask-CRUD-infra/helm/service-monitor.yaml -n monitoring
           
