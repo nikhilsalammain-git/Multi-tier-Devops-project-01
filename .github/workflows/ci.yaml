@@ -43,8 +43,8 @@ jobs:
           
       - name: Scan terraform & helm files for security issues using Trivy
         run: |
-          trivy fs --scanners misconfig --exit-code 1 --severity HIGH,CRITICAL flask-CRUD-infra/terraform
-          trivy fs --scanners misconfig --exit-code 1 --severity HIGH,CRITICAL flask-CRUD-infra/helm
+          trivy fs --scanners misconfig --skip-dirs '**/.terraform' --exit-code 1 --severity HIGH,CRITICAL flask-CRUD-infra/terraform
+          trivy fs --scanners misconfig --skip-dirs '**/.terraform' --exit-code 1 --severity HIGH,CRITICAL flask-CRUD-infra/helm
           
       - name: Download Trivy HTML template
         run: |
