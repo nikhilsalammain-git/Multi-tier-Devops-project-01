@@ -31,11 +31,10 @@ jobs:
       - name: Install Trivy
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget tar
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.41.0/trivy_0.41.0_Linux-64bit.tar.gz
-          tar -xzf trivy_0.41.0_Linux-64bit.tar.gz
-          sudo mv trivy /usr/local/bin/trivy
-          sudo chmod +x /usr/local/bin/trivy
+          sudo apt-get install -y curl
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh -o install.sh
+          chmod +x install.sh
+          sudo ./install.sh -b /usr/local/bin v0.74.0
  
       - name: Scan Docker image for vulnerabilities
         run: |
