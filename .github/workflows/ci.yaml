@@ -44,10 +44,19 @@ jobs:
         run: |
           trivy fs --exit-code 1 --severity HIGH,CRITICAL flask-CRUD-infra/terraform
           trivy fs --exit-code 1 --severity HIGH,CRITICAL flask-CRUD-infra/helm
-
-      - name: Trivy artifact upload
+      - name: Run Trivy with HTML Template
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'template'
+          template: '@contrib/html.tpl'
+          output: 'trivy-report.html'
+          exit-code: '0' 
+          severity: 'CRITICAL,HIGH'
+      - name: Upload HTML Dashboard Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: trivy-vulnerability-report # Name of the downloaded zip folder
-          path: trivy-report.txt # Path to the file created in the previous step
-          retention-days: 5 # Optional: Cleans up the file automatically after 5 days
+          name: trivy-html-dashboard
+          path: trivy-report.html
+          retention-days: 7
