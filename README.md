@@ -659,7 +659,7 @@ Sharing it with your network
 Contributing to its improvement
 
 🛠️ Author & Community
-This project is maintained by Harshhaa 💡. Your feedback and contributions are welcome!
+This project is maintained by Myself💡. Your feedback and contributions are welcome!
 
 📧 Connect with me:
 
