@@ -5,6 +5,7 @@ WORKDIR /app
 COPY requirements.txt ./
 
 RUN pip install -r requirements.txt
+RUN pip install --upgrade "msgpack>=1.2.1" "setuptools>=78.1.1"
 
 COPY . .
 
