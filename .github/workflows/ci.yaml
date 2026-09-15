@@ -38,7 +38,8 @@ jobs:
 
       - name: Scan Docker image for vulnerabilities
         run: |
-          trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed ${{ secrets.DOCKER_USER }}/flask-app:latest
+          trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed --pkg-types os ${{ secrets.DOCKER_USER }}/flask-app:latest
+          docker run --rm ${{ secrets.DOCKER_USER }}/flask-app:latest sh -c "pip install --no-cache-dir pip-audit && pip-audit"
           
       - name: Scan terraform & helm files for security issues using Trivy
         run: |
