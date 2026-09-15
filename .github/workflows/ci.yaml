@@ -27,7 +27,7 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USER }}/flask-app:latest flask-app/
           docker push ${{ secrets.DOCKER_USER }}/flask-app:latest
-    
+
       - name: Install Trivy
         run: |
           sudo apt-get update
@@ -35,15 +35,21 @@ jobs:
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh -o install.sh
           chmod +x install.sh
           sudo ./install.sh -b /usr/local/bin v0.74.0
- 
+
       - name: Scan Docker image for vulnerabilities
         run: |
-          trivy image ${{ secrets.DOCKER_USER }}/flask-app:latest
-      
+          trivy image --exit-code 1 --severity HIGH,CRITICAL ${{ secrets.DOCKER_USER }}/flask-app:latest
+
       - name: Scan terraform & helm files for security issues using Trivy
         run: |
           trivy fs --exit-code 1 --severity HIGH,CRITICAL flask-CRUD-infra/terraform
           trivy fs --exit-code 1 --severity HIGH,CRITICAL flask-CRUD-infra/helm
+
+      - name: Download Trivy HTML template
+        run: |
+          mkdir -p contrib
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o contrib/html.tpl
+
       - name: Run Trivy with HTML Template
         uses: aquasecurity/trivy-action@v0.36.0
         with:
@@ -52,8 +58,9 @@ jobs:
           format: 'template'
           template: '@contrib/html.tpl'
           output: 'trivy-report.html'
-          exit-code: '0' 
+          exit-code: '0'
           severity: 'CRITICAL,HIGH'
+
       - name: Upload HTML Dashboard Artifact
         uses: actions/upload-artifact@v4
         with:
