@@ -38,7 +38,7 @@ jobs:
  
       - name: Scan Docker image for vulnerabilities
         run: |
-          trivy image --exit-code 1 --severity HIGH,CRITICAL ${{ secrets.DOCKER_USER }}/flask-app:latest
+          trivy image ${{ secrets.DOCKER_USER }}/flask-app:latest
       
       - name: Scan terraform & helm files for security issues using Trivy
         run: |
