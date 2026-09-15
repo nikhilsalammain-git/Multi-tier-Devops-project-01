@@ -1,5 +1,64 @@
 # Flask CRUD Application – AWS EKS DevOps Project
 
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+   - [Introduction](#introduction)
+   - [Key Features](#key-features)
+
+2. [Architecture Overview](#architecture-overview)
+   - [High-Level Architecture](#high-level-flow)
+
+3. [Infrastructure Components](#infrastructure-components)
+   - [AWS Infrastructure](#1-aws-infrastructure)
+   - [VPC Module](#vpc-module)
+   - [EKS Module](#eks-module)
+   - [RDS PostgreSQL](#rds-module)
+
+4. [Application Layer](#application-layer)
+   - [Flask CRUD Application](#flask-crud-application)
+   - [Docker Containerization](#flask-crud-application)
+
+5. [Kubernetes & Helm Deployment](#kubernetes--helm-deployment)
+   - [Helm Chart](#kubernetes--helm-deployment)
+   - [Application Namespace](#kubernetes--helm-deployment)
+   - [Database Secret](#kubernetes--helm-deployment)
+   - [Deployment Verification](#kubernetes--helm-deployment)
+
+6. [CI Pipeline](#ci-pipeline)
+   - [CI Workflow](#ci-workflow)
+   - [Docker Image Build & Push](#ci-pipeline)
+   - [Security Scanning](#security-gates)
+   - [Trivy Security Report](#security-reporting)
+
+7. [Continuous Deployment](#continuous-deployment)
+   - [Terraform Infrastructure Deployment](#3-provision-aws-infrastructure)
+   - [EKS Configuration](#6-configure-eks)
+   - [Database Configuration](#7-configure-database-secret)
+   - [Helm Application Deployment](#8-deploy-application)
+   - [Deployment Verification](#9-verify-deployment)
+
+8. [Monitoring & Observability](#monitoring--observability)
+   - [Prometheus](#monitoring--observability)
+   - [Grafana](#monitoring--observability)
+   - [ServiceMonitor](#monitoring--observability)
+
+9. [Security Implementation](#security-implementation)
+   - [Container Security](#container-security)
+   - [Python Dependency Security](#python-dependency-security)
+   - [Infrastructure Security](#infrastructure-security)
+   - [Helm Security](#helm-security)
+   - [Secret Management](#secret-management)
+   - [Security Reporting](#security-reporting)
+
+10. [Repository Structure](#repository-structure)
+
+11. [Technologies Used](#technologies-used)
+
+12. [Key DevOps Workflow](#key-devops-workflow)
+
+13. [Project Outcome](#project-outcome)
+
 ## Project Overview
 
 ### Introduction
