@@ -651,3 +651,20 @@ The project establishes an automated DevOps workflow for deploying a **Flask CRU
 
 The main objective is to demonstrate how an application can move from **source code → secure container image → provisioned AWS infrastructure → Kubernetes deployment → monitored workload** using repeatable and automated DevOps practices.
 
+⭐ Support the Project
+If you found this project helpful, please consider:
+
+Starring ⭐ the repository
+Sharing it with your network
+Contributing to its improvement
+
+🛠️ Author & Community
+This project is maintained by Harshhaa 💡. Your feedback and contributions are welcome!
+
+📧 Connect with me:
+
+GitHub: [nikhilsalammain-git](https://github.com/nikhilsalammain-git)
+LinkedIn: [Nikhil Salam](https://www.linkedin.com/in/nikhil-salam/)
+
+
+
