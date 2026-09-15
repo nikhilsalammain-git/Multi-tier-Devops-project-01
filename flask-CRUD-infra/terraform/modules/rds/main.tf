@@ -15,12 +15,17 @@ resource "aws_security_group" "rds" {
     protocol    = "-1"
     from_port   = 0
     to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.allowed_cidr_blocks
   }
 
   tags = {
     Name = "${var.identifier}-sg"
   }
+}
+
+resource "aws_kms_key" "rds_storage" {
+  description         = "KMS key for RDS storage encryption"
+  enable_key_rotation = true
 }
 
 resource "aws_db_subnet_group" "rds" {
@@ -46,6 +51,8 @@ resource "aws_db_instance" "rds" {
   db_subnet_group_name    = aws_db_subnet_group.rds.name
   vpc_security_group_ids  = [aws_security_group.rds.id]
   publicly_accessible     = var.publicly_accessible
+  storage_encrypted       = true
+  kms_key_id              = aws_kms_key.rds_storage.arn
   multi_az                = false
   skip_final_snapshot     = var.skip_final_snapshot
   deletion_protection     = var.deletion_protection

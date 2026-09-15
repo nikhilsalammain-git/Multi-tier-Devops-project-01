@@ -20,6 +20,23 @@ resource "aws_s3_bucket" "terraform-state" {
   }
 }
 
+resource "aws_kms_key" "terraform_state" {
+  description         = "KMS key for Terraform state encryption"
+  enable_key_rotation = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state" {
+  bucket = aws_s3_bucket.terraform-state.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.terraform_state.arn
+      sse_algorithm     = "aws:kms"
+    }
+    bucket_key_enabled = true
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "terraform-state" {
   bucket = aws_s3_bucket.terraform-state.id
 
