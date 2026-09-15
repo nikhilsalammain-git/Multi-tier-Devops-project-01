@@ -80,7 +80,7 @@ jobs:
       - name: Update Kubernetes database secret
         run: |
           kubectl create secret generic flask-db-secret \
-            --from-literal=DB_URL="postgresql://flaskadmin:${{ secrets.DB_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" \
+            --from-literal=DB_URL="postgresql://${{ vars.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" \
             --namespace=flask-app \
             --dry-run=client -o yaml | kubectl apply -f -
           echo "DB_URL=postgresql://flaskadmin:${{ secrets.DB_PASSWORD }}@${{ steps.rds.outputs.endpoint }}:5432/${{ steps.rds.outputs.db_name }}" 
