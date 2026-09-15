@@ -4,7 +4,11 @@ WORKDIR /app
 
 COPY requirements.txt ./
 
-RUN pip install -r requirements.txt
+RUN apt-get update \
+	&& apt-get upgrade -y \
+	&& apt-get clean \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& pip install --no-cache-dir --upgrade -r requirements.txt
 
 
 COPY . .

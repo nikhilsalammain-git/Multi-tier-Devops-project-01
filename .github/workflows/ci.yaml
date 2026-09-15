@@ -25,7 +25,7 @@ jobs:
 
       - name: Build, tag & push image to Docker Hub
         run: |
-          docker build -t ${{ secrets.DOCKER_USER }}/flask-app:latest flask-app/
+          docker build --pull -t ${{ secrets.DOCKER_USER }}/flask-app:latest flask-app/
           docker push ${{ secrets.DOCKER_USER }}/flask-app:latest
 
       - name: Install Trivy
