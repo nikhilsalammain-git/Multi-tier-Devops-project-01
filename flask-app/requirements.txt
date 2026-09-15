@@ -3,3 +3,5 @@ flask-sqlalchemy
 sqlalchemy>=2.0.36
 psycopg2-binary
 prometheus_flask_exporter
+msgpack>=1.2.1
+setuptools>=78.1.1
